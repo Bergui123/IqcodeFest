@@ -1,4 +1,3 @@
-# game.py
 from deck import create_deck
 from player_module import Player
 
@@ -8,18 +7,27 @@ class UnoGame:
         self.deck = create_deck()
         self.discard_pile = []
         
-        self.player = Player("You")
-        self.computer = Player("Computer")
+        # Create 4 players: 1 human, 3 computers
+        self.players = [
+            Player("You"),
+            Player("Computer 1"),
+            Player("Computer 2"),
+            Player("Computer 3"),
+        ]
         
+        # Deal 7 cards to each player
         for _ in range(7):
-            self.player.draw_card(self.deck)
-            self.computer.draw_card(self.deck)
+            for player in self.players:
+                player.draw_card(self.deck)
         
         self.discard_pile.append(self.deck.pop())
         
-        self.player_turn = True
-        self.skip_next_player = False
-        self.turn_direction = 1  # 1 for normal, -1 for reversed
+        self.current_player_idx = 0
+        self.turn_direction = 1  # 1 for clockwise, -1 for counter-clockwise
+        self.skip_next = False
+    
+    def get_current_player(self):
+        return self.players[self.current_player_idx]
     
     def reverse_turn_order(self):
         self.turn_direction *= -1
@@ -33,8 +41,12 @@ class UnoGame:
     def play_card(self, player, card_index):
         card = player.hand[card_index]
         if self.can_play(card):
-            card.play(self)
+            # Remove card from player's hand
             player.hand.pop(card_index)
+            # Place card on discard pile
+            self.discard_pile.append(card)
+            # Trigger card effect
+            card.play(self)
             self.ui.update()
             return True
         return False
@@ -44,17 +56,23 @@ class UnoGame:
         self.ui.update()
         return card
     
-    def next_turn(self):
-        if self.skip_next_player:
-            self.skip_next_player = False
-            self.player_turn = not self.player_turn  # skip turn
+    def advance_turn(self):
+        # Handle skip effect
+        if self.skip_next:
+            self.skip_next = False
+            # Skip the next player by moving an extra step
+            self.current_player_idx = (self.current_player_idx + self.turn_direction) % len(self.players)
         
-        else:
-            self.player_turn = not self.player_turn
+        # Advance to next player
+        self.current_player_idx = (self.current_player_idx + self.turn_direction) % len(self.players)
+        
+        # If current player has no cards, game should end before next action
+    
+    def next_player(self):
+        return self.players[self.current_player_idx + self.turn_direction]
     
     def check_winner(self):
-        if len(self.player.hand) == 0:
-            return self.player.name
-        if len(self.computer.hand) == 0:
-            return self.computer.name
+        for player in self.players:
+            if len(player.hand) == 0:
+                return player.name
         return None
