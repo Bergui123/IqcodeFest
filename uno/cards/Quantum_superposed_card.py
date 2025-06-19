@@ -43,7 +43,7 @@ class QuantumSuperposedCard(Card):
         counts = result.get_counts()
 
         bitstring = list(counts.keys())[0]
-        number = int(bitstring, 2)% self.number_of_different_cards
+        number = int(bitstring, 2)% (self.number_of_different_cards+1)
 
         
         # Rejection sampling if number > max_cards
