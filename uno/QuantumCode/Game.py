@@ -1,46 +1,76 @@
 from uno.QuantumCode.Deck import Deck
+import random
+from uno.QuantumCode.Player import Player
+from uno.cards.card import Card
 
 
 class Game:
     def __init__(self):
         """Initialize the game with an empty player list, turn list, and card in play."""
-        self.PlayerList = []
-        self.PlayerTurn = []
-        self.CardInPlay = []
-        self.Deck=Deck()
-        self.TurnList=[]
-        self.CurrentPlayerIndex=0
-        self.TopCard=None
+        self.deck = Deck()
+        self.discard_pile = []
+        self.players = []
+        self.current_player_idx = 0
 
-    def AddPlayer(self, player):
-        self.PlayerList.append(player)
-        self.PLayerTurn.add(player)
-        self.CardInPlay.append(player.GetHand())
+    def add_player(self, name):
+        """Add a player by name."""
+        self.players.append(Player(name))
 
-    def RemovePlayer(self, player):
-        if player in self.PlayerList:
-            self.PlayerList.remove(player)
-        self.CardInPlay.remove(player.GetHand())
+    def build_deck(self):
+        """Populate and shuffle the deck."""
+        colors = ["Red", "Green", "Blue", "Yellow"]
+        values = [str(n) for n in range(0, 10)]
+        # Add number cards
+        for color in colors:
+            self.deck.CardInPile.append(Card(color, "0"))
+            for v in values[1:]:
+                self.deck.CardInPile.append(Card(color, v))
+                self.deck.CardInPile.append(Card(color, v))
+        random.shuffle(self.deck.CardInPile)
 
-    def GetPlayers(self):
-        return self.PlayerList
-    
-    def DrawCard(self,playerNumber):
-        self.PlayerList[playerNumber].DrawCard(self.Deck.DrawCard())
+    def deal(self):
+        """Deal 7 cards to each player"""
+        for _ in range(7):
+            for player in self.players:
+                if self.deck.CardInPile:
+                    player.AddCard(self.deck.CardInPile.pop(0))
 
-    def PlayCard(self, playerNumber , cardIndex):
-        if (self.PlayerList[playerNumber].GetCard is SpecialCard):
-            card=self.PlayerList[playerNumber].PlayCard(cardIndex)
-            card.execute()
-        else:
-            self.TopCard=self.PlayerList[playerNumber].PlayCard(cardIndex)
+    def start(self):
+        """Initial setup: build deck, deal, and flip first card."""
+        self.build_deck()
+        self.deal()
+        # flip first card
+        if self.deck.CardInPile:
+            first = self.deck.CardInPile.pop(0)
+            self.discard_pile.append(first)
 
-    def GetTopCard(self):
-        """Return the top card in play."""
-        return self.TopCard
-    def SetTopCard(self, card):
-        """Set the top card in play."""
-        self.TopCard = card            
-    def GetPlayerInfo(self, playerNumber):
-        return self.PlayerList[playerNumber]
-    
+    def get_current_player(self):
+        return self.players[self.current_player_idx]
+
+    def get_top_card(self):
+        return self.discard_pile[-1] if self.discard_pile else None
+
+    def draw_card(self, player_idx):
+        """Controller handles drawing a card."""
+        if self.deck.CardInPile:
+            card = self.deck.CardInPile.pop(0)
+            self.players[player_idx].AddCard(card)
+            return card
+        return None
+
+    def play_card(self, player_idx, card_idx):
+        """Controller handles playing a card."""
+        played = self.players[player_idx].PlayCard(card_idx)
+        self.discard_pile.append(played)
+        return played
+
+    def next_turn(self):
+        self.current_player_idx = (self.current_player_idx + 1) % len(self.players)
+
+    def has_winner(self):
+        """Return winning player or None."""
+        for player in self.players:
+            if not player.GetHand():
+                return player
+        return None
+

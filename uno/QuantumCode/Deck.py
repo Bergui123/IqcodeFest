@@ -6,12 +6,14 @@ class Deck:
         self.CardDiscarted = []
         self.AllTheCardType = []
     def PlayCard(self, card):
-        CardDiscarded.add(card)
+        # move a played card to discard pile
+        self.CardDiscarted.append(card)
     def AddCard(self, card):
         """Add a card to the deck."""
         self.CardInPile.append(card)
     def DrawCard(self):
-        self.CardInPile.pop(0)
+        # draw top card from pile
+        return self.CardInPile.pop(0) if self.CardInPile else None
     def GetPileSize(self):
         """Return the number of cards in the pile."""
         return len(self.CardInPile)
