@@ -25,6 +25,6 @@ class Game:
         self.PlayerList[playerNumber].DrawCard(self.Deck.DrawCard())
     def PlayCard(self, playerNumber , cardIndex):
         if (self.PlayerList[playerNumber].GetCard is SpecialCard):
-            
+            card=self.PlayerList[playerNumber].PlayCard(cardIndex)
         else:
-
+            
