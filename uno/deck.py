@@ -3,6 +3,8 @@ from cards.card import Card
 from cards.quantum_card import QuantumCard
 import random
 
+from uno.cards import QuantumEnigma
+
 colors = ['Red', 'Green', 'Blue', 'Yellow']
 numbers = list(range(0, 10))
 specials = ['Skip', 'Reverse', 'Draw Two']
@@ -20,5 +22,6 @@ def create_deck():
     # Add quantum cards
     deck.append(QuantumCard("Purple", "Quantum"))
     deck.append(QuantumCard("Purple", "Quantum"))
+    deck.append(QuantumEnigma())
     random.shuffle(deck)
     return deck
