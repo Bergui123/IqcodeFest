@@ -11,3 +11,182 @@ List of Uno rules :
     - Reverse the game sense switches
     - Skip the next person to play can't play
     - Color change you choose the color for the next card
+
+
+
+
+
+Types of UNO
+Classic UNO (1971)
+
+    108 cards: colors + action cards + Wild + Wild Draw Four.
+
+        Standard gameplay: match color/number, shout “UNO!”
+
+UNO Attack (1999)
+
+    Electronic card launcher replaces drawing.
+
+    Special cards: Wild Hit Fire, Wild All Hit; “Hit 2” forces launcher hits.
+
+    Adds randomness and suspense.
+
+UNO Spin (2005)
+
+    Adds a spinner wheel triggered by Spin cards.
+
+    Wheel outcomes include: Discard Color, Draw Blue/Red, Trade Hands, Show Hand.
+
+UNO Flip (2019)
+
+    Double‑sided deck: Light vs Dark sides.
+
+    Flip card flips everyone’s cards and pile.
+
+    Dark side has tougher penalties (Draw 5, Skip Everyone, Wild Draw Color).
+
+UNO Dare (2014)
+
+    Dare cards force next player to choose: draw 2 or perform a dare.
+
+    Dares include Family / Show‑Off / Daredevil prompts, plus a blank card for custom dares.
+
+UNO Flash (2007)
+
+    Electronic unit with timers; randomly selects next player.
+
+    If timer runs out, penalties (drawing cards).
+
+    Fast‑paced and unpredictable.
+
+UNO Blast (2012)
+
+    Card “blaster” stores cards when drawing.
+
+    At random, blasts and dumps stored cards on someone.
+
+UNO Roboto (2010)
+
+    Talking robot records players’ names and commands.
+
+    Random events: Swap Hands, enforce custom house rule, reverse direction.
+
+UNO Showdown (2020) / Showdown Supercharged
+
+    Adds a duel device; two players face-off by slapping paddle during sudden “showdown.”
+
+    Winner makes slower player draw extra cards.
+
+UNO Triple Play (2021)
+
+    Three discard piles with lights (green/yellow/red).
+
+    Pile “overload” triggers sound and causes draw penalty.
+
+    Optional timed mode.
+
+UNO All Wild (2022)
+
+    Every card is a Wild or Wild-action.
+
+    No color/number matching needed; fast, chaotic action.
+
+UNO Show ’Em No Mercy (2023)
+
+    Harsher draw penalties (Wild Draw 10).
+
+    Knock-out rule: players over 25 cards are eliminated.
+
+    Game ends by normal win or last player standing.
+
+
+UNO Elite
+
+    Includes collectible cards and alternate play rules.
+
+    Designed for UNO collectors and enthusiasts.
+
+UNO Ultimate
+
+    Each player has a unique character deck (e.g. Marvel heroes) with special abilities.
+
+    Includes an enemy deck and new strategic gameplay elements.
+
+UNO 50th Anniversary Edition
+
+    Special gold packaging and “Wild 50/50” card with coin flip mechanic.
+
+    Celebrates UNO’s 50 years with limited-edition aesthetics.
+
+UNO Flex
+
+    Players can choose to flex action cards for alternate powers.
+
+    Introduces flexibility and decision-making per turn.
+
+UNO Deluxe
+
+    Premium edition with a card tray, score pad, and elegant packaging.
+
+    Same rules, higher-quality components.
+
+UNO Remix
+
+    Players personalize the deck mid-game by writing rules on remix cards.
+
+    The deck evolves and carries over across games.
+
+UNO Party
+
+    Designed for larger groups; includes more cards and party-friendly actions.
+
+    Focus on chaotic group interactions.
+
+UNO Wild Twists
+
+    Adds exclusive action cards not found in classic sets.
+
+    Enhances gameplay variety with unexpected moves.
+
+
+UNO H₂O
+
+    Waterproof, transparent plastic cards.
+
+    Includes “Wild Downpour” card for splashy effects.
+
+    Ideal for beach or pool play.
+
+UNO ColorADD (2017)
+
+    Symbols for color-blind accessibility using the ColorADD system.
+
+    Allows inclusive play for color vision deficiencies.
+
+UNO Braille (2019)
+
+    Developed with the National Federation of the Blind.
+
+    Braille markings on all cards for visually impaired players.
+
+SPIN-OFFS & RELATED GAMES
+
+UNO Stacko
+
+    Combines UNO mechanics with Jenga-style stacking blocks.
+
+    Match color or number to remove blocks; tower collapses = lose.
+
+ONO 99
+
+    Players add numbers to a shared total; don’t go over 99.
+
+    Strategic shedding game with math and risk elements.
+
+DOS
+
+    The official sequel to UNO.
+
+    Focuses on number matching and summing cards to make “DOS” (two piles).
+
+    More numerical and planning-based than classic UNO.
