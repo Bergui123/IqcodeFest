@@ -2,6 +2,7 @@
 from cards.card import Card
 from cards.quantum_card import QuantumCard
 import random
+import qrng  # Quantum Random Number Generator
 
 from uno.cards import QuantumEnigma
 
@@ -23,5 +24,17 @@ def create_deck():
     deck.append(QuantumCard("Purple", "Quantum"))
     deck.append(QuantumCard("Purple", "Quantum"))
     deck.append(QuantumEnigma())
-    random.shuffle(deck)
+    #random.shuffle(deck)
+    QuantumShuffleDeck(deck)
     return deck
+
+def QuantumShuffleDeck(deck):
+    """Shuffle the deck using quantum random numbers."""
+    shuffled_deck = []
+    qrng.set_provider_as_IBMQ('')
+    qrng.set_backend()
+    while deck:
+        # Get a quantum random index
+        index = qrng.get_random_int32(0, len(deck) - 1)
+        shuffled_deck.append(deck.pop(index))
+    return shuffled_deck
