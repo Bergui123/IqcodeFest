@@ -1,0 +1,13 @@
+List of Uno rules :
+- Each player draw seven cards at the start
+- There is a card left in the middle
+- The player to the left of the dealer goes first
+- The player can play a card from their hand that matches the color or symbol of the card on
+- The starting sense is clockwise
+- The goal is to get rid of all our cards
+- List of the classic special cards :
+    - +2 the next player to play draws two cards
+    - +4 the next player to play draws four cards and you get to choose the color
+    - Reverse the game sense switches
+    - Skip the next person to play can't play
+    - Color change you choose the color for the next card
