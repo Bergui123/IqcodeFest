@@ -4,7 +4,7 @@ class Player:
         self.Name = name
         self.Hand = []
         self.CardPlayed = []
-        self.TurnNumber
+        self.TurnNumber = None  # initialize turn number
 
     def AddCard(self, card):
         """Add a card to the player's hand."""

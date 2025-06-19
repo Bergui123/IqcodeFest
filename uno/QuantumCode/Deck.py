@@ -11,7 +11,7 @@ class Deck:
         """Add a card to the deck."""
         self.CardInPile.append(card)
     def DrawCard(self):
-        CardInPile.pop(0)
+        self.CardInPile.pop(0)
     def GetPileSize(self):
         """Return the number of cards in the pile."""
         return len(self.CardInPile)
