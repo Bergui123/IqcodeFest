@@ -8,6 +8,7 @@ class QuantumDrawCard(Card):
     def __init__(self, color, max_cards=8):
         super().__init__(color, f"Quantum Draw up to {max_cards}")
         self.max_cards = max_cards
+        self.cardId = 13  # Unique identifier for this card type
 
     def play(self, game):
         """Play the quantum draw card effect."""
