@@ -13,4 +13,3 @@ class Card:
     def play(self, game):
         # Default card: no special effect, just advance turn
         game.discard_pile.append(self)
-        game.advance_turn()
