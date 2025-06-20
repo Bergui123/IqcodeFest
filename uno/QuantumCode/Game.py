@@ -1,8 +1,10 @@
+from qiskit import QuantumCircuit
 from uno.QuantumCode.Deck import Deck
 import random
 from uno.QuantumCode.Player import Player
 from uno.cards.card import Card
-import qrng
+from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
+from qiskit import transpile
 
 
 class Game:
@@ -78,11 +80,25 @@ class Game:
     def QuantumShuffleDeck(self):
         """Shuffle the deck using quantum principles."""
         shuffled_deck = []
-        qrng.set_provider_as_IBMQ('')
-        qrng.set_backend()
+        """Generate a quantum random number between 0 and max_cards (inclusive)."""
+        n_qubits = 3  #
+        qc = QuantumCircuit(n_qubits, n_qubits)
+
+        # Put all qubits into superposition
+        for q in range(n_qubits):
+            qc.h(q)
+
+        qc.measure(range(n_qubits), range(n_qubits))
+        sim = AerSimulator()    
+        qc = transpile(qc, sim)
+        job = sim.run(qc)
+        result = job.result()
+        counts = result.get_counts()
+
+        bitstring = list(counts.keys())[0]
+        number = int(bitstring, 2)
+        
         while self.deck:
-            # Get a quantum random index
-            index = qrng.get_random_int32(0, len(self.deck) - 1)
-            shuffled_deck.append(self.deck.pop(index))
+            shuffled_deck.append(self.deck.pop(number% len(self.deck)))
         self.deck = shuffled_deck
 
