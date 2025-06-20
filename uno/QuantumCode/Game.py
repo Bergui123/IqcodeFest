@@ -1,8 +1,8 @@
 from qiskit import QuantumCircuit
-from uno.QuantumCode.Deck import Deck
+from QuantumCode.Deck import Deck
 import random
-from uno.QuantumCode.Player import Player
-from uno.cards.card import Card
+from QuantumCode.Player import Player
+from cards.card import Card
 from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
 from qiskit import transpile
 
@@ -49,6 +49,8 @@ class Game:
 
     def get_current_player(self):
         return self.players[self.current_player_idx]
+    def get_next_player(self):
+        return self.players[(self.current_player_idx + 1) % len(self.players)]
 
     def get_top_card(self):
         return self.discard_pile[-1] if self.discard_pile else None
@@ -64,6 +66,7 @@ class Game:
     def play_card(self, player_idx, card_idx):
         """Controller handles playing a card."""
         played = self.players[player_idx].PlayCard(card_idx)
+        played.play(self)
         self.discard_pile.append(played)
         return played
 

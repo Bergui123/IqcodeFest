@@ -1,15 +1,24 @@
 from cards.quantum_balance_card import QuantumBalanceCard
-from player_module import Player
+from QuantumCode.Player import Player
 from cards.card import Card
 
 class DummyUI:
     def set_info(self, msg):
         print(f"UI info: {msg}")
 
+
 class DummyGame:
     def __init__(self):
-        self.players = [Player("Player 1"), Player("Player 2")]
-        self.ui = DummyUI()
+        self.players = [Player("Alice"), Player("Bob")]
+        self.current_player_idx = 0
+        self.ui = DummyUI()  # ou une version mock
+        # Ajoute des cartes fictives aux joueurs si nécessaire
+
+    def get_current_player(self):
+        return self.players[self.current_player_idx]
+
+    def get_next_player(self):
+        return self.players[(self.current_player_idx + 1) % len(self.players)]
 
 def create_sample_card(color, value):
     # Simplified card for test
@@ -61,3 +70,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    
