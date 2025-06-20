@@ -56,7 +56,7 @@ class UnoGUI:
         self.draw_button = tk.Button(self.root, text="Draw Card", command=self.draw_card, bg="#333333", fg="white", activebackground="#555555")
         self.draw_button.pack(pady=5)
         # Removed name size/color animations
-        # Bot hand display
+        # Bot Hand display
         self.bot_area = tk.Frame(self.root, bg="#1e1e1e")
         self.bot_area.pack(pady=5)
         self.bot_label = tk.Label(self.bot_area, text="", font=(None, 12, "bold"), fg="white", bg="#1e1e1e")
@@ -66,9 +66,9 @@ class UnoGUI:
 
     def update_ui(self):
         player = self.game.get_current_player()
-        # Bot turn: show its hand, draw and feedback
+        # Bot turn: show its Hand, draw and feedback
         if getattr(player, 'is_bot', False):
-            # display bot hand area
+            # display bot Hand area
             self.bot_area.pack(pady=5)
             self.bot_cards_frame.pack(pady=5)
             self.update_bot_display()
@@ -82,7 +82,7 @@ class UnoGUI:
             # update next turn
             self.update_ui()
             return
-        # hide bot hand when not bot turn
+        # hide bot Hand when not bot turn
         self.bot_area.pack_forget()
         self.bot_cards_frame.pack_forget()
         # reset and render human player's UI
@@ -118,7 +118,7 @@ class UnoGUI:
             btn.pack(side=tk.LEFT, padx=4, pady=2)
 
     def update_bot_display(self):
-        """Update the bot's hand display in the UI."""
+        """Update the bot's Hand display in the UI."""
         bot = self.game.players[-1]  # Assuming the bot is the last player
         self.bot_label.config(text=f"{bot.GetName()}\'s Hand:")
         # Clear old bot card buttons

@@ -13,9 +13,9 @@ class Quantum_grover_card(Card):
         current_hand = current_player.GetHand()
         other_players = [p for p in game.players if p != current_player]
 
-        # Ask the player to choose a card from their hand
+        # Ask the player to choose a card from their Hand
         print(f"\n🔮 {current_player.GetName()} played Quantum Grover!")
-        print("Select a card from your hand to search in opponents' hands:")
+        print("Select a card from your Hand to search in opponents' hands:")
         for i, card in enumerate(current_hand):
             print(f"  {i}: {card}")
 
@@ -31,10 +31,10 @@ class Quantum_grover_card(Card):
         print(f"\nRunning Grover’s algorithm for: {target_card}\n")
 
         for player in other_players:
-            hand = player.GetHand()
-            found = grover_card_search(hand, target_card, verbose=False)
+            Hand = player.GetHand()
+            found = grover_card_search(Hand, target_card, verbose=False)
             if found:
-                index = card_to_index(target_card, hand)
+                index = card_to_index(target_card, Hand)
                 print(f"✅ {player.GetName()} has {target_card} at index {index}. Adding {index} card(s) as penalty.")
                 for _ in range(index):
                     new_card = game.draw_card(game.players.index(player))

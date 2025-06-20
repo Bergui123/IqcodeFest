@@ -29,22 +29,22 @@ class teleportation_card(Card):
         swaps_done = []
         
         for _ in range(num_swaps):
-            if not curr_player.hand or not next_player.hand:
+            if not curr_player.Hand or not next_player.Hand:
                 break
             
             # Pick random cards to swap
-            card_from_curr = random.choice(curr_player.hand)
-            card_from_next = random.choice(next_player.hand)
+            card_from_curr = random.choice(curr_player.Hand)
+            card_from_next = random.choice(next_player.Hand)
             
-            curr_player.hand.remove(card_from_curr)
-            next_player.hand.remove(card_from_next)
+            curr_player.Hand.remove(card_from_curr)
+            next_player.Hand.remove(card_from_next)
             
-            curr_player.hand.append(card_from_next)
-            next_player.hand.append(card_from_curr)
+            curr_player.Hand.append(card_from_next)
+            next_player.Hand.append(card_from_curr)
             
             swaps_done.append((str(card_from_curr), str(card_from_next)))
         
-        msg = f"Teleportation swapped {len(swaps_done)} cards between {curr_player.name} and {next_player.name}:\n"
+        msg = f"Teleportation swapped {len(swaps_done)} cards between {curr_player.Name} and {next_player.Name}:\n"
         msg += "\n".join([f"{curr} <--> {nxt}" for curr, nxt in swaps_done])
         
     

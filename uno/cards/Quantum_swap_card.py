@@ -14,14 +14,14 @@ class Quantum_swap_card(Card):
         """Play the quantum swap card effect."""
         self.activate_quantum_effect(game)
     def activate_quantum_effect(self, game,player1,player2):
-        nbQubits = len(player1.hand) + len(player2.hand)
+        nbQubits = len(player1.Hand) + len(player2.Hand)
         circuit = QuantumCircuit(nbQubits+1)
         #apply hadamar gate to the first qubit it will be used as a control qubit
         circuit.h(0)
-        for qubit in range(1, len(player1.hand)+1):
-            circuit.x(qubit)  # Initialize qubits for player1's hand at 1
-        for qubit in range (1, len(player1.hand)+1):  
-            circuit.cswap(0, qubit,len(player1.hand)+qubit) 
+        for qubit in range(1, len(player1.Hand)+1):
+            circuit.x(qubit)  # Initialize qubits for player1's Hand at 1
+        for qubit in range (1, len(player1.Hand)+1):  
+            circuit.cswap(0, qubit,len(player1.Hand)+qubit) 
         circuit.measure_all()
         # Run the circuit on a simulator backend
         backend = AerSimulator()
@@ -33,9 +33,9 @@ class Quantum_swap_card(Card):
         # Swap the hands of the players based on the measured values
         for i, value in enumerate(measured_values):
             #player 2 gets the cards where mesured value is 1
-            game.player2.hand.extend([player1.hand.pop(i) for i in range(len(player1.hand)) if measured_values[value][i] == '1'])
+            game.player2.Hand.extend([player1.Hand.pop(i) for i in range(len(player1.Hand)) if measured_values[value][i] == '1'])
             #player 1 gets the cards where measured value is 0 
-            game.player1.hand.extend([player2.hand.pop(i) for i in range(len(player2.hand)) if measured_values[value][i] == '0'])
+            game.player1.Hand.extend([player2.Hand.pop(i) for i in range(len(player2.Hand)) if measured_values[value][i] == '0'])
         
                 
         

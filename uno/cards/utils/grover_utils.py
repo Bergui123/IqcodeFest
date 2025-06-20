@@ -2,8 +2,8 @@ from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 from cards.card import Card
 
-def card_to_index(card: Card, hand: list[Card]) -> int:
-    for i, c in enumerate(hand):
+def card_to_index(card: Card, Hand: list[Card]) -> int:
+    for i, c in enumerate(Hand):
         print(f"Checking card at index {i}: {c}")
         if c.color == card.color and c.value == card.value:
             return i
@@ -48,7 +48,7 @@ def grover_card_search(player_hand: list[Card], target_card: Card, verbose=True)
     card_index = card_to_index(target_card, player_hand)
     if card_index == -1:
         if verbose:
-            print(f"The card {target_card} is not in the hand.")
+            print(f"The card {target_card} is not in the Hand.")
         return False
 
     target_bin = index_to_binary(card_index, num_qubits)
