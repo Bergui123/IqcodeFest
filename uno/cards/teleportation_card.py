@@ -4,13 +4,12 @@ from qiskit_aer import AerSimulator  # or from qiskit.providers.aer import AerSi
 
 import random
 
-class TeleportationCard(Card):
+class teleportation_card(Card):
     def __init__(self, color):
         super().__init__(color, "Teleportation")
         self.cardId = 18 # Unique identifier for this card type
     
     def play(self, game):
-        game.ui.set_info(f"{self.color} Teleportation Card played! Activating quantum teleportation...")
         
         # Run the teleportation circuit
         measurement = self.activate_teleportation()
@@ -22,11 +21,10 @@ class TeleportationCard(Card):
         num_swaps = ones_count
         
         if num_swaps == 0:
-            game.ui.set_info("Teleportation succeeded flawlessly! No cards swapped.")
             return
         
-        curr_player = game.current_player
-        next_player = game.next_player
+        curr_player = game.get_current_player()
+        next_player = game.get_next_player()
         
         swaps_done = []
         
@@ -49,8 +47,6 @@ class TeleportationCard(Card):
         msg = f"Teleportation swapped {len(swaps_done)} cards between {curr_player.name} and {next_player.name}:\n"
         msg += "\n".join([f"{curr} <--> {nxt}" for curr, nxt in swaps_done])
         
-        game.ui.set_info(msg)
-        game.ui.update()
     
     def activate_teleportation(self):
         qc = QuantumCircuit(3, 2)

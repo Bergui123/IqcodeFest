@@ -1,12 +1,21 @@
-from qiskit import QuantumCircuit
-from QuantumCode.Deck import Deck
 import random
-from QuantumCode.Player import Player
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+
+from .Deck   import Deck
+from .Player import Player
 from cards.card import Card
-from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
-from qiskit import transpile
 
-
+# explicit imports for every card in uno/cards/
+from uno.cards.Quantum_color_card       import Quantum_color_card
+from uno.cards.quantum_balance_card import quantum_balance_card
+from uno.cards.quantum_card import quantum_card
+from uno.cards.Quantum_draw_card       import Quantum_draw_card
+from uno.cards.Quantum_grover_card import Quantum_grover_card
+from uno.cards.Quantum_shuffle_card    import Quantum_shuffle_card
+from uno.cards.Quantum_superposed_card import Quantum_superposed_card
+from uno.cards.Quantum_swap_card      import Quantum_swap_card
+from uno.cards.teleportation_card import teleportation_card
 class Game:
     def __init__(self):
         """Initialize the game with an empty player list, turn list, and card in play."""
@@ -14,7 +23,6 @@ class Game:
         self.discard_pile = []
         self.players = []
         self.current_player_idx = 0
-
     def add_player(self, name):
         """Add a player by name."""
         self.players.append(Player(name))
@@ -29,8 +37,45 @@ class Game:
             for v in values[1:]:
                 self.deck.CardInPile.append(Card(color, v))
                 self.deck.CardInPile.append(Card(color, v))
-        self.QuantumShuffleDeck()
-        #random.shuffle(self.deck.CardInPile)
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Red"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Blue"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Green"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Yellow"))
+        self.deck.CardInPile.append(Quantum_draw_card("Red", 8))
+        self.deck.CardInPile.append(Quantum_draw_card("Blue", 8))
+        self.deck.CardInPile.append(Quantum_draw_card("Green", 8))
+        self.deck.CardInPile.append(Quantum_draw_card("Yellow", 8))
+        self.deck.CardInPile.append(Quantum_superposed_card("Red", 8))
+        self.deck.CardInPile.append(Quantum_superposed_card("Blue", 8))
+        self.deck.CardInPile.append(Quantum_superposed_card("Green", 8))
+        self.deck.CardInPile.append(Quantum_superposed_card("Yellow", 8))
+        self.deck.CardInPile.append(Quantum_swap_card("Red", 8))
+        self.deck.CardInPile.append(Quantum_swap_card("Blue", 8))
+        self.deck.CardInPile.append(Quantum_swap_card("Green", 8))
+        self.deck.CardInPile.append(Quantum_swap_card("Yellow", 8))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Red", 8))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Blue", 8))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Green", 8))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Yellow", 8))
+        self.deck.CardInPile.append(quantum_balance_card("Red"))
+        self.deck.CardInPile.append(quantum_balance_card("Blue"))
+        self.deck.CardInPile.append(quantum_balance_card("Green"))
+        self.deck.CardInPile.append(quantum_balance_card("Yellow"))
+        self.deck.CardInPile.append(quantum_card("Red", 8))
+        self.deck.CardInPile.append(quantum_card("Blue", 8))
+        self.deck.CardInPile.append(quantum_card("Green", 8))
+        self.deck.CardInPile.append(quantum_card("Yellow", 8))
+        self.deck.CardInPile.append(Quantum_grover_card("Red"))
+        self.deck.CardInPile.append(Quantum_grover_card("Blue"))
+        self.deck.CardInPile.append(Quantum_grover_card("Green"))
+        self.deck.CardInPile.append(Quantum_grover_card("Yellow"))
+        self.deck.CardInPile.append(teleportation_card("Red"))
+        self.deck.CardInPile.append(teleportation_card("Blue"))
+        self.deck.CardInPile.append(teleportation_card("Green"))
+        self.deck.CardInPile.append(teleportation_card("Yellow"))
+
+        #self.QuantumShuffleDeck()
+        random.shuffle(self.deck.CardInPile)
 
     def deal(self):
         """Deal 7 cards to each player"""
@@ -50,6 +95,7 @@ class Game:
 
     def get_current_player(self):
         return self.players[self.current_player_idx]
+    
     def get_next_player(self):
         return self.players[(self.current_player_idx + 1) % len(self.players)]
 
@@ -73,9 +119,6 @@ class Game:
 
     def next_turn(self):
         self.current_player_idx = (self.current_player_idx + 1) % len(self.players)
-
-    from qiskit import QuantumCircuit, transpile
-    from qiskit_aer import AerSimulator
 
     def quantum_detect_winner_index(self):
         """
@@ -142,6 +185,10 @@ class Game:
         number = int(bitstring, 2)
         
         while self.deck:
-            shuffled_deck.append(self.deck.pop(number% len(self.deck)))
+            shuffled_deck.append(self.deck.CardInPile.pop(number% len(self.deck.CardInPile)))
         self.deck = shuffled_deck
 
+    def reverse_turn_order(self):
+        """Reverse the turn order of players."""
+        self.players.reverse()
+        self.current_player_idx = len(self.players) - 1 - self.current_player_idx

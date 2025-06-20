@@ -3,7 +3,7 @@ from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
 from qiskit import transpile
 
-class QuantumShuffledCard(Card):
+class Quantum_shuffle_card(Card):
     """A card that shuffles the cards in all the player's hands using quantum principles."""
     def __init__(self, color, max_cards=8):
         super().__init__(color, f"Quantum Shuffle up to {max_cards}")
@@ -12,9 +12,7 @@ class QuantumShuffledCard(Card):
 
     def play(self, game):
         """Play the quantum shuffle card effect."""
-        game.ui.set_info(f"{self.color} Quantum Shuffle Card played! Activating quantum effect...")
         self.activate_quantum_effect(game)
-        game.ui.set_info("Hands shuffled successfully.")
 
     def activate_quantum_effect(self, game):
         """Shuffle the hands of all players using quantum principles."""
@@ -47,6 +45,3 @@ class QuantumShuffledCard(Card):
                 if len(cards) == 0:
                     continue       
                 player.hand.append(cards.pop(number % len(cards)))
-
-
-        game.ui.set_info("All players' hands have been shuffled.")

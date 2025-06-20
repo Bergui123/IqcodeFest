@@ -3,7 +3,7 @@ from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
 from qiskit import transpile
 
-class QuantumSwapCard(Card):
+class Quantum_swap_card(Card):
     """A card that swaps the hands of the player with another player usig the principle of the swap gate."""
     def __init__(self, color, max_cards=8):
         super().__init__(color, f"Quantum Superposed up to {max_cards}")
@@ -12,9 +12,7 @@ class QuantumSwapCard(Card):
     
     def play(self, game):
         """Play the quantum swap card effect."""
-        game.ui.set_info(f"{self.color} Quantum Swap Card played! Activating quantum effect...")
         self.activate_quantum_effect(game)
-        game.ui.set_info("Hands swapped successfully.")
     def activate_quantum_effect(self, game,player1,player2):
         nbQubits = len(player1.hand) + len(player2.hand)
         circuit = QuantumCircuit(nbQubits+1)
@@ -38,7 +36,6 @@ class QuantumSwapCard(Card):
             game.player2.hand.extend([player1.hand.pop(i) for i in range(len(player1.hand)) if measured_values[value][i] == '1'])
             #player 1 gets the cards where measured value is 0 
             game.player1.hand.extend([player2.hand.pop(i) for i in range(len(player2.hand)) if measured_values[value][i] == '0'])
-        game.ui.set_info(f"Swapped hands of {game.players[-1].name} and {game.players[0].name}.")
         
                 
         

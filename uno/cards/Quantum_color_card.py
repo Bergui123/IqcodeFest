@@ -3,7 +3,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 import numpy as np
 
-class QuantumColorCard(Card):
+class Quantum_color_card(Card):
     """
     Uses a full 1D discrete-time coined quantum walk to choose a color.
     """
@@ -15,9 +15,7 @@ class QuantumColorCard(Card):
         super().__init__("Quantum", "Color")
 
     def play(self, game):
-        game.ui.set_info(f"{self.color} Quantum Color Card played! Activating quantum walk...")
         new_color = self.activate_quantum_walk()
-        game.ui.set_info(f"Color changed to {new_color}.")
         game.current_color = new_color
 
     def activate_quantum_walk(self, steps=np.random.randint(1, 5)):

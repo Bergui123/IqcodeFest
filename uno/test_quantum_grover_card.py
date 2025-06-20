@@ -1,7 +1,7 @@
-from cards.grover_card import QuantumGroverCard
+from uno.cards.Quantum_grover_card import QuantumGroverCard
 from cards.card import Card
 from QuantumCode.Player import Player
-from QuantumCode.Game import Game
+from uno.QuantumCode.GameController import Game
 
 def create_sample_card(color, value):
     return Card(color, value)

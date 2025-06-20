@@ -12,7 +12,7 @@ from qiskit_optimization.translators import to_ising
 import numpy as np
 
 
-class QuantumBalanceCard(Card):
+class quantum_balance_card(Card):
     def __init__(self, color="Purple"):
         super().__init__(color, "Quantum Balance")
         self.cardId = 14
@@ -34,7 +34,6 @@ class QuantumBalanceCard(Card):
             return 5
 
     def play(self, game):
-        game.ui.set_info(f"{self.color} Quantum Balance Card played! Rebalancing hands quantumly...")
 
         players = [game.get_current_player(), game.get_next_player()]   #game.players[:2]
         all_cards = players[0].hand + players[1].hand
@@ -138,4 +137,4 @@ class QuantumBalanceCard(Card):
         for j, player in enumerate(players):
             player.hand = new_hands[j]
 
-        game.ui.set_info("Quantum rebalance complete.")
+

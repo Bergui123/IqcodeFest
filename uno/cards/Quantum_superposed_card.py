@@ -3,7 +3,7 @@ from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
 from qiskit import transpile
 
-class QuantumSuperposedCard(Card):
+class Quantum_superposed_card(Card):
     """A card superposed and is only measured when played."""
     def __init__(self, color, max_cards=8):
         super().__init__(color, f"Quantum Superposed up to {max_cards}")
@@ -13,17 +13,12 @@ class QuantumSuperposedCard(Card):
 
     def play(self, game):
         """Play the quantum superposed card effect."""
-        game.ui.set_info(f"{self.color} Quantum Superposed Card played! Activating quantum effect...")
         drawn_cards = self.activate_quantum_effect()
-        game.ui.set_info(f"Drawn {drawn_cards} cards from the deck.")
         
         for _ in range(drawn_cards):
             card = game.deck.draw_card()
             if card:
                 game.next_player.hand.append(card)
-                game.ui.set_info(f"{game.current_player.name} drew a card: {card}")
-            else:
-                game.ui.set_info("No more cards in the deck to draw.")
 
     def activate_quantum_effect(self):
         """Generate a quantum random number between 0 and number of different cards (inclusive)."""

@@ -4,7 +4,7 @@ from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
 from qiskit import transpile
 
-class QuantumDrawCard(Card):
+class Quantum_draw_card(Card):
     def __init__(self, color, max_cards=8):
         super().__init__(color, f"Quantum Draw up to {max_cards}")
         self.max_cards = max_cards
@@ -12,17 +12,15 @@ class QuantumDrawCard(Card):
 
     def play(self, game):
         """Play the quantum draw card effect."""
-        game.ui.set_info(f"{self.color} Quantum Draw Card played! Activating quantum effect...")
+    
         drawn_cards = self.activate_quantum_effect()
-        game.ui.set_info(f"Drawn {drawn_cards} cards from the deck.")
+       
         
         for _ in range(drawn_cards):
-            card = game.deck.draw_card()
+            card = game.deck.DrawCard()
             if card:
                 game.next_player.hand.append(card)
-                game.ui.set_info(f"{game.current_player.name} drew a card: {card}")
-            else:
-                game.ui.set_info("No more cards in the deck to draw.")
+              
 
     def activate_quantum_effect(self):
         """Generate a quantum random number between 0 and max_cards (inclusive)."""

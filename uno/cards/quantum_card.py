@@ -4,7 +4,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 from cards.card import Card
 
-class QuantumCard(Card):
+class quantum_card(Card):
     def __init__(self, color, value):
         super().__init__(color, value)
         self.circuit = self.create_circuit()
@@ -30,7 +30,7 @@ class QuantumCard(Card):
         # Example effect: if measured '0', skip next player; else reverse
         if '0' in counts:
             game.skip_next_player = True
-            game.ui.set_info("QuantumCard effect: Skipping next player!")
+            
         else:
             game.reverse_turn_order()
-            game.ui.set_info("QuantumCard effect: Reversing turn order!")
+        

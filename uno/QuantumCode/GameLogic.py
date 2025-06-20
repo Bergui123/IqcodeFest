@@ -2,7 +2,7 @@
 import os, sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from uno.QuantumCode.Game import Game
+from uno.QuantumCode.GameController import Game
 from uno.cards.card import Card
 from uno.QuantumCode.Player import Player
 from uno.Bot.BotCode import BotCode

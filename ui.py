@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'uno'))
 from tkinter import simpledialog, messagebox
-from uno.QuantumCode.Game import Game
+from uno.QuantumCode.GameController import Game
 from uno.Bot.BotCode import BotCode
 import random
 

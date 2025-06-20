@@ -3,7 +3,7 @@ from cards.utils.grover_utils import grover_card_search, card_to_index
 from qiskit_aer import AerSimulator
 
 
-class QuantumGroverCard(Card):
+class Quantum_grover_card(Card):
     def __init__(self, color="Purple"):
         super().__init__(color, "Quantum Grover")
         self.cardId = 42  # Just an arbitrary ID
