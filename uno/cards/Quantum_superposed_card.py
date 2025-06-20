@@ -5,9 +5,9 @@ from qiskit_aer import AerSimulator
 
 class Quantum_superposed_card(Card):
     """A card that creates a superposition over all possible card IDs and adds one to the next player."""
-    def __init__(self, color, max_card_id=18):
+    def __init__(self, color):
         super().__init__(color, "Quantum Superposed Card")
-        self.max_card_id = max_card_id
+        self.max_card_id = 18
         self.cardId = 15
 
     def play(self, game):
