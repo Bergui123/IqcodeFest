@@ -132,5 +132,7 @@ class BotCode(Player):
         idx = game.players.index(self)
         action, card_idx = self.decide_action(game)
         if action == 'play' and card_idx is not None:
-            return game.play_card(idx, card_idx)
-        return game.draw_card(idx)
+            played = game.play_card(idx, card_idx)
+            return ('play', played)
+        drawn = game.draw_card(idx)
+        return ('draw', drawn)

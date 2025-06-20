@@ -68,18 +68,21 @@ class UnoGUI:
         player = self.game.get_current_player()
         # Bot turn: show its Hand, draw and feedback
         if getattr(player, 'is_bot', False):
-            # display bot Hand area
+            # display bot Hand area and handle its action
             self.bot_area.pack(pady=5)
             self.bot_cards_frame.pack(pady=5)
             self.update_bot_display()
-            # bot draws
-            drawn = player.take_turn(self.game)
-            if drawn:
-                messagebox.showinfo("Bot Turn", f"{player.GetName()} draws {drawn}")
-            else:
-                messagebox.showwarning("Bot Turn", f"{player.GetName()} tried to draw but deck is empty.")
+            # bot takes action
+            action, card = player.take_turn(self.game)
+            if action == 'play':
+                messagebox.showinfo("Bot Turn", f"{player.GetName()} plays {card}")
+            elif action == 'draw':
+                if card:
+                    messagebox.showinfo("Bot Turn", f"{player.GetName()} draws {card}")
+                else:
+                    messagebox.showwarning("Bot Turn", f"{player.GetName()} tried to draw but deck is empty.")
             self.game.next_turn()
-            # update next turn
+            # update next turn UI
             self.update_ui()
             return
         # hide bot Hand when not bot turn
@@ -104,7 +107,7 @@ class UnoGUI:
             btn = tk.Button(
                 self.cards_frame,
                 text=str(card),
-                width=12,
+                width=15,
                 bg=btn_color,
                 fg="black",
                 activebackground=btn_color,
@@ -130,8 +133,7 @@ class UnoGUI:
             btn = tk.Button(
                 self.bot_cards_frame,
                 text=str(card),
-                width=12,
-                bg=btn_color,
+                width=15,
                 fg="black",
                 state=tk.DISABLED,
                 relief=tk.RAISED,
