@@ -28,7 +28,7 @@ def main():
     game = DummyGame()
 
    # Give player 1 some cards (initially 10 cards)
-    game.players[0].hand = [
+    game.players[0].Hand = [
         create_sample_card('Red', 1),
         create_sample_card('Green', 3),
         create_sample_card('Blue', 5),
@@ -42,7 +42,7 @@ def main():
     ]
 
     # Give player 2 some cards (initially 10 cards)
-    game.players[1].hand = [
+    game.players[1].Hand = [
         create_sample_card('Red', 2),
         create_sample_card('Green', 4),
         create_sample_card('Blue', 'Draw Two'),
@@ -58,7 +58,7 @@ def main():
 
     print("Before balancing:")
     for i, p in enumerate(game.players):
-        print(f"Player {i+1} hand: {[str(card) for card in p.hand]}")
+        print(f"Player {i+1} Hand: {[str(card) for card in p.Hand]}")
 
     # Create and play QuantumBalanceCard
     qb_card = QuantumBalanceCard()
@@ -66,7 +66,7 @@ def main():
 
     print("\nAfter balancing:")
     for i, p in enumerate(game.players):
-        print(f"Player {i+1} hand: {[str(card) for card in p.hand]}")
+        print(f"Player {i+1} Hand: {[str(card) for card in p.Hand]}")
 
 if __name__ == "__main__":
     main()

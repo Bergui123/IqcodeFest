@@ -2,7 +2,7 @@ List of Uno rules :
 - Each player draw seven cards at the start
 - There is a card left in the middle
 - The player to the left of the dealer goes first
-- The player can play a card from their hand that matches the color or symbol of the card on
+- The player can play a card from their Hand that matches the color or symbol of the card on
 - The starting sense is clockwise
 - The goal is to get rid of all our cards
 - List of the classic special cards :

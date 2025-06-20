@@ -17,11 +17,11 @@ class Quantum_shuffle_card(Card):
     def activate_quantum_effect(self, game):
         """Shuffle the hands of all players using quantum principles."""
         n_players = len(game.players)
-        max_cards_hands = max(len(player.hand) for player in game.players) 
+        max_cards_hands = max(len(player.Hand) for player in game.players) 
         n_qubits = n_players * max_cards_hands  # Enough qubits to represent all cards in hands
         cards = []
         for player in game.players:
-            cards.append(player.hand)
+            cards.append(player.Hand)
 
         qc = QuantumCircuit(n_qubits, n_qubits)
 
@@ -39,9 +39,11 @@ class Quantum_shuffle_card(Card):
 
         bitstring = list(counts.keys())[0]
         number = int(bitstring, 2)
+        
         for player in game.players:
-            player.hand.clear()
+            new_hand = []
             for i in range(max_cards_hands):         
                 if len(cards) == 0:
                     continue       
-                player.hand.append(cards.pop(number % len(cards)))
+                new_hand.append(cards.pop(number % len(cards)))
+            player.Hand = new_hand        

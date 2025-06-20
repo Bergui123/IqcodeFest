@@ -39,7 +39,7 @@ def main():
 
     print("\n===== Before playing Quantum Grover =====")
     for p in game.players:
-        print(f"{p.GetName()} hand: {[str(c) for c in p.GetHand()]}")
+        print(f"{p.GetName()} Hand: {[str(c) for c in p.GetHand()]}")
 
     # Example: add and play Quantum Grover card if you want
     quantum_card = QuantumGroverCard()
@@ -48,7 +48,7 @@ def main():
 
     print("\n===== After playing Quantum Grover =====")
     for p in game.players:
-        print(f"{p.GetName()} hand: {[str(c) for c in p.GetHand()]}")
+        print(f"{p.GetName()} Hand: {[str(c) for c in p.GetHand()]}")
 
 if __name__ == "__main__":
     main()

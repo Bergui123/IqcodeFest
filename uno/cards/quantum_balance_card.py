@@ -36,7 +36,7 @@ class quantum_balance_card(Card):
     def play(self, game):
 
         players = [game.get_current_player(), game.get_next_player()]   #game.players[:2]
-        all_cards = players[0].hand + players[1].hand
+        all_cards = players[0].Hand + players[1].Hand
 
         dummy_used = False
         dummy_index = -1
@@ -89,7 +89,7 @@ class quantum_balance_card(Card):
             cost = job.result()[0].data.evs
             return cost
 
-        circuit_qaoa = QAOAAnsatz(hamiltonian, reps=10)
+        circuit_qaoa = QAOAAnsatz(hamiltonian, reps=20)
         p = circuit_qaoa.num_parameters // 2
         gamma_init = np.linspace(0.1, 1.5, p)
         beta_init = np.linspace(0.1, 1.5, p)
@@ -135,6 +135,6 @@ class quantum_balance_card(Card):
 
         # Replace player hands
         for j, player in enumerate(players):
-            player.hand = new_hands[j]
+            player.Hand = new_hands[j]
 
 

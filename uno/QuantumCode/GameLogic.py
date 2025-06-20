@@ -38,7 +38,6 @@ class GameLogic:
     def game_loop(self):
         while True:
             player = self.controller.get_current_player()
-            # Bot always draws
             if hasattr(player, 'is_bot') and player.is_bot:
                 drawn = player.take_turn(self.controller)
                 if drawn:
@@ -49,9 +48,9 @@ class GameLogic:
                 continue
             top = self.controller.get_top_card()
             print(f"\n{player.GetName()}'s turn. Top card: {top}")
-            hand = player.GetHand()
-            # Display hand
-            for idx, card in enumerate(hand):
+            Hand = player.GetHand()
+            # Display Hand
+            for idx, card in enumerate(Hand):
                 print(f"  {idx}: {card}")
             choice = input("Choose card index to play or 'd' to draw: ")
             if choice.lower() == 'd':
@@ -63,7 +62,7 @@ class GameLogic:
             else:
                 try:
                     idx = int(choice)
-                    card = hand[idx]
+                    card = Hand[idx]
                     if card.matches(top):
                         played = self.controller.play_card(self.controller.current_player_idx, idx)
                         print(f"{player.GetName()} plays {played}")

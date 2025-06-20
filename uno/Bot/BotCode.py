@@ -29,13 +29,13 @@ class BotCode(Player):
     def is_playable(self, card, top_card):
         return card.color == top_card.color or card.value == top_card.value
 
-    def generate_qubo(self, hand, top_card):
+    def generate_qubo(self, Hand, top_card):
         mdl = Model("BotDecision")
-        m = len(hand)
+        m = len(Hand)
         x = [mdl.binary_var(name=f"x_{i}") for i in range(m)]
 
-        print(f"Hand: {[str(card) if self.is_playable(card, top_card) else 0 for card in hand]}")
-        weights = [self.card_weight(card) if self.is_playable(card, top_card) else 0 for card in hand]
+        print(f"Hand: {[str(card) if self.is_playable(card, top_card) else 0 for card in Hand]}")
+        weights = [self.card_weight(card) if self.is_playable(card, top_card) else 0 for card in Hand]
 
         obj = mdl.sum(-weights[i] * x[i] for i in range(m))
         constraint = mdl.sum(x) - 1
@@ -55,12 +55,12 @@ class BotCode(Player):
 
     def decide_action(self, game):
         top_card = game.get_top_card()
-        hand = self.GetHand()
+        Hand = self.GetHand()
 
-        if not hand:
+        if not Hand:
             return ('draw', None)
 
-        qubo, weights = self.generate_qubo(hand, top_card)
+        qubo, weights = self.generate_qubo(Hand, top_card)
         hamiltonian, _ = to_ising(qubo)
 
         backend = AerSimulator()
@@ -102,7 +102,7 @@ class BotCode(Player):
         print(f"Most likely bitstring: {most_likely_bitstring}")
 
         # Indices jouables
-        playable_indices = [i for i, card in enumerate(hand) if self.is_playable(card, top_card)]
+        playable_indices = [i for i, card in enumerate(Hand) if self.is_playable(card, top_card)]
 
         if most_likely_bitstring is not None:
             selected_index = None
@@ -110,19 +110,19 @@ class BotCode(Player):
             for i in range(len(playable_indices)):
                 bit_val = int(most_likely_bitstring[::-1][i])
                 real_index = playable_indices[i]
-                print(f"Card {real_index}: {hand[real_index]}, Bit: {bit_val}")
+                print(f"Card {real_index}: {Hand[real_index]}, Bit: {bit_val}")
                 if bit_val == 1:
                     return ('play', real_index)
 
             print("Bitstring has no 1s, fallback triggered.")
             for i in playable_indices:
-                w = self.card_weight(hand[i])
+                w = self.card_weight(Hand[i])
                 if w > max_weight:
                     max_weight = w
                     selected_index = i
 
             if selected_index is not None:
-                print(f"Fallback: manually selecting card {selected_index} -> {hand[selected_index]}")
+                print(f"Fallback: manually selecting card {selected_index} -> {Hand[selected_index]}")
                 return ('play', selected_index)
 
         print("No valid move, drawing a card.")
@@ -132,5 +132,7 @@ class BotCode(Player):
         idx = game.players.index(self)
         action, card_idx = self.decide_action(game)
         if action == 'play' and card_idx is not None:
-            return game.play_card(idx, card_idx)
-        return game.draw_card(idx)
+            played = game.play_card(idx, card_idx)
+            return ('play', played)
+        drawn = game.draw_card(idx)
+        return ('draw', drawn)
