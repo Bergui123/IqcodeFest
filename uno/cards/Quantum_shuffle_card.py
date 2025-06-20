@@ -39,9 +39,11 @@ class Quantum_shuffle_card(Card):
 
         bitstring = list(counts.keys())[0]
         number = int(bitstring, 2)
+        
         for player in game.players:
-            player.Hand.clear()
+            new_hand = []
             for i in range(max_cards_hands):         
                 if len(cards) == 0:
                     continue       
-                player.Hand.append(cards.pop(number % len(cards)))
+                new_hand.append(cards.pop(number % len(cards)))
+            player.Hand = new_hand        

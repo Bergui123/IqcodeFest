@@ -19,7 +19,7 @@ class Quantum_draw_card(Card):
         for _ in range(drawn_cards):
             card = game.deck.DrawCard()
             if card:
-                game.get_next_player.Hand.append(card)
+                game.get_next_player().Hand.append(card)
               
 
     def activate_quantum_effect(self):

@@ -18,7 +18,7 @@ class Quantum_superposed_card(Card):
         for _ in range(drawn_cards):
             card = game.deck.DrawCard()
             if card:
-                game.next_player.Hand.append(card)
+                game.get_next_player().Hand.append(card)
 
     def activate_quantum_effect(self):
         """Generate a quantum random number between 0 and number of different cards (inclusive)."""

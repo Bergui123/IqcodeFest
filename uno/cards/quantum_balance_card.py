@@ -89,7 +89,7 @@ class quantum_balance_card(Card):
             cost = job.result()[0].data.evs
             return cost
 
-        circuit_qaoa = QAOAAnsatz(hamiltonian, reps=10)
+        circuit_qaoa = QAOAAnsatz(hamiltonian, reps=20)
         p = circuit_qaoa.num_parameters // 2
         gamma_init = np.linspace(0.1, 1.5, p)
         beta_init = np.linspace(0.1, 1.5, p)
