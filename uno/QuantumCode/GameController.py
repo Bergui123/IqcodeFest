@@ -154,7 +154,7 @@ class Game:
         counts = result.get_counts()
 
         measured = list(counts.keys())[0]
-        return int(measured[::-1], 2)  # Reverse for Qiskit's LSB convention
+        return int(measured, 2)  # Reverse for Qiskit's LSB convention
 
     def has_winner(self):
         """Return winning player or None."""

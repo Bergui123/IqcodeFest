@@ -3,7 +3,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 
 class Quantum_swap_card(Card):
-    """A card that swaps cards of two players using a quantum CSWAP gate, measuring only the data qubits."""
+    """A card that swaps cards of two players using a quantum CSWAP gate, measuring the control and data qubits."""
     def __init__(self, color, max_cards=8):
         super().__init__(color, "Quantum Hand Swap")
         self.cardId = 16
@@ -20,54 +20,49 @@ class Quantum_swap_card(Card):
 
         # total qubits = 1 (control) + 2 * n_swap (cards)
         total_qubits = 1 + 2 * n_swap
-        qc = QuantumCircuit(total_qubits, 2 * n_swap)  # Only measure data qubits
+        # Measure all qubits including control qubit
+        qc = QuantumCircuit(total_qubits, total_qubits)
 
         # Control in superposition
         qc.h(0)
 
-        # Apply CSWAPs: control is qubit 0, pairs are (1+i, 1+n_swap+i)
+        # Apply CSWAP gates controlled by qubit 0
         for i in range(n_swap):
             qc.cswap(0, 1 + i, 1 + n_swap + i)
 
-        # Measure only the card qubits, skipping the control (qubit 0)
-        for i in range(2 * n_swap):
-            qc.measure(1 + i, i)
+        # Measure all qubits
+        qc.measure(range(total_qubits), range(total_qubits))
 
         # Run on simulator
         backend = AerSimulator()
         qc = transpile(qc, backend)
         result = backend.run(qc, shots=1).result()
         counts = result.get_counts()
-        bitstring = list(counts.keys())[0][::-1]  # Reverse to align with qubit index
+        bitstring = list(counts.keys())[0][::-1]  # Reverse to align qubit index with bitstring index
 
         print(f"[Quantum SWAP] Measured bitstring: {bitstring}")
 
-        # Decode result into new hands
+        control_bit = bitstring[0]
+
         new_hand1 = []
         new_hand2 = []
 
-        for i in range(n_swap):
-            # Index in bitstring:
-            # - player1 data qubits are first half [0:n_swap]
-            # - player2 data qubits are second half [n_swap:2*n_swap]
-            b1 = bitstring[i]
-            b2 = bitstring[n_swap + i]
-
-            if b1 == '1':
-                new_hand1.append(player1.Hand[i])
-            else:
-                new_hand2.append(player1.Hand[i])
-
-            if b2 == '1':
+        if control_bit == '1':
+            # Swap first n_swap cards
+            for i in range(n_swap):
                 new_hand1.append(player2.Hand[i])
-            else:
+                new_hand2.append(player1.Hand[i])
+        else:
+            # Keep hands as is for first n_swap cards
+            for i in range(n_swap):
+                new_hand1.append(player1.Hand[i])
                 new_hand2.append(player2.Hand[i])
 
-        # Add remaining cards if any (those that weren't swapped)
+        # Append remaining cards (those beyond n_swap)
         new_hand1.extend(player1.Hand[n_swap:])
         new_hand2.extend(player2.Hand[n_swap:])
 
-        # Apply hands
+        # Apply new hands
         player1.Hand = new_hand1
         player2.Hand = new_hand2
 
