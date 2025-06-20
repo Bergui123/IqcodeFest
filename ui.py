@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from uno.QuantumCode.Game import Game
+from uno.Bot.BotCode import BotCode
 import random
 
 class UnoGUI:
@@ -28,6 +29,10 @@ class UnoGUI:
             if not name:
                 name = f"Player{i+1}"
             self.game.add_player(name)
+        # Add a bot that always draws
+        bot = BotCode()
+        self.game.players.append(bot)
+        messagebox.showinfo("Bot Added", f"{bot.GetName()} has joined the game!")
         # Start game and build UI
         self.game.start()
         self.build_game_ui()
@@ -47,16 +52,39 @@ class UnoGUI:
         self.cards_frame.pack(pady=10)
         self.draw_button = tk.Button(self.root, text="Draw Card", command=self.draw_card, bg="#333333", fg="white", activebackground="#555555")
         self.draw_button.pack(pady=5)
-        # Start status color animation and schedule delayed name growth
-        self.animate_status_color()
-        # delay before name starts expanding
-        self.root.after(2000, self.animate_name_expansion)
+        # Removed name size/color animations
+        # Bot hand display
+        self.bot_area = tk.Frame(self.root, bg="#1e1e1e")
+        self.bot_area.pack(pady=5)
+        self.bot_label = tk.Label(self.bot_area, text="", font=(None, 12, "bold"), fg="white", bg="#1e1e1e")
+        self.bot_label.pack(anchor="w")
+        self.bot_cards_frame = tk.Frame(self.root, bg="#1e1e1e")
+        self.bot_cards_frame.pack(pady=5)
 
     def update_ui(self):
-        # Reset name size at turn start
+        player = self.game.get_current_player()
+        # Bot turn: show its hand, draw and feedback
+        if getattr(player, 'is_bot', False):
+            # display bot hand area
+            self.bot_area.pack(pady=5)
+            self.bot_cards_frame.pack(pady=5)
+            self.update_bot_display()
+            # bot draws
+            drawn = player.take_turn(self.game)
+            if drawn:
+                messagebox.showinfo("Bot Turn", f"{player.GetName()} draws {drawn}")
+            else:
+                messagebox.showwarning("Bot Turn", f"{player.GetName()} tried to draw but deck is empty.")
+            self.game.next_turn()
+            # update next turn
+            self.update_ui()
+            return
+        # hide bot hand when not bot turn
+        self.bot_area.pack_forget()
+        self.bot_cards_frame.pack_forget()
+        # reset and render human player's UI
         self.name_font_size = 14
         self.name_label.config(font=(None, self.name_font_size, "bold"))
-        player = self.game.get_current_player()
         top = self.game.get_top_card()
         # Update dynamic labels
         self.name_label.config(text=player.GetName())
@@ -84,6 +112,28 @@ class UnoGUI:
             # Hover effect
             btn.bind("<Enter>", lambda e, b=btn: b.config(relief=tk.SUNKEN))
             btn.bind("<Leave>", lambda e, b=btn: b.config(relief=tk.RAISED))
+            btn.pack(side=tk.LEFT, padx=4, pady=2)
+
+    def update_bot_display(self):
+        """Update the bot's hand display in the UI."""
+        bot = self.game.players[-1]  # Assuming the bot is the last player
+        self.bot_label.config(text=f"{bot.GetName()}\'s Hand:")
+        # Clear old bot card buttons
+        for widget in self.bot_cards_frame.winfo_children():
+            widget.destroy()
+        # Create bot card buttons matching player style but disabled
+        for card in bot.GetHand():
+            btn_color = self.color_map.get(card.color, "white")
+            btn = tk.Button(
+                self.bot_cards_frame,
+                text=str(card),
+                width=12,
+                bg=btn_color,
+                fg="black",
+                state=tk.DISABLED,
+                relief=tk.RAISED,
+                bd=2
+            )
             btn.pack(side=tk.LEFT, padx=4, pady=2)
 
     def play_card(self, idx):
@@ -114,18 +164,6 @@ class UnoGUI:
             messagebox.showwarning("Deck Empty", "No cards left to draw.")
         self.game.next_turn()
         self.update_ui()
-
-    def animate_status_color(self):
-        """Cycle status label color for a dynamic effect."""
-        self.turn_label.config(fg=self.color_cycle[self.cycle_index])
-        self.cycle_index = (self.cycle_index + 1) % len(self.color_cycle)
-        self.root.after(500, self.animate_status_color)
-    
-    def animate_name_expansion(self):
-        """Continuously increase name font size for pressure effect."""
-        self.name_font_size += 1
-        self.name_label.config(font=(None, self.name_font_size, "bold"))
-        self.root.after(200, self.animate_name_expansion)
 
     def show_name_spin(self):
         """Rotate the player name text by cycling its characters to simulate spin."""
