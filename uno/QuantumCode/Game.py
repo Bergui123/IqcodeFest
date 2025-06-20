@@ -73,11 +73,50 @@ class Game:
     def next_turn(self):
         self.current_player_idx = (self.current_player_idx + 1) % len(self.players)
 
+    from qiskit import QuantumCircuit, transpile
+    from qiskit_aer import AerSimulator
+
+    def quantum_detect_winner_index(self):
+        """
+        Simule un circuit quantique où l'index du joueur avec main vide est encodé en binaire.
+        Suppose qu'un seul joueur a une main vide.
+        """
+        num_players = len(self.players)
+        num_qubits = (num_players - 1).bit_length()
+
+        # Cherche index du joueur gagnant
+        winner_index = None
+        for i, player in enumerate(self.players):
+            if not player.GetHand():
+                winner_index = i
+                break
+
+        if winner_index is None:
+            return None  # Aucun gagnant
+
+        # Encode l’index dans un registre quantique
+        qc = QuantumCircuit(num_qubits, num_qubits)
+        bin_index = format(winner_index, f'0{num_qubits}b')
+
+        for i, bit in enumerate(reversed(bin_index)):
+            if bit == '1':
+                qc.x(i)
+
+        qc.measure(range(num_qubits), range(num_qubits))
+
+        sim = AerSimulator()
+        qc = transpile(qc, sim)
+        result = sim.run(qc, shots=1).result()
+        counts = result.get_counts()
+
+        measured = list(counts.keys())[0]
+        return int(measured[::-1], 2)  # Reverse for Qiskit's LSB convention
+
     def has_winner(self):
         """Return winning player or None."""
-        for player in self.players:
-            if not player.GetHand():
-                return player
+        idx = self.quantum_detect_winner_index()
+        if idx is not None:
+            return self.players[idx]
         return None
     
     def QuantumShuffleDeck(self):
