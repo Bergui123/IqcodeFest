@@ -1,45 +1,46 @@
 from cards.card import Card
-from qiskit import QuantumCircuit
-from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
-from qiskit import transpile
+from cards.utils.card_factory import create_card_by_id
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
 
 class Quantum_superposed_card(Card):
-    """A card superposed and is only measured when played."""
-    def __init__(self, color, max_cards=8):
-        super().__init__(color, f"Quantum Superposed up to {max_cards}")
-        self.max_cards = max_cards
-        self.cardId=15
-        self.number_of_different_cards = 19  # Maximum number of different cards to draw
+    """A card that creates a superposition over all possible card IDs and adds one to the next player."""
+    def __init__(self, color, max_card_id=18):
+        super().__init__(color, "Quantum Superposed Card")
+        self.max_card_id = max_card_id
+        self.cardId = 15
 
     def play(self, game):
-        """Play the quantum superposed card effect."""
-        drawn_cards = self.activate_quantum_effect()
-        
-        for _ in range(drawn_cards):
-            card = game.deck.DrawCard()
-            if card:
-                game.get_next_player().Hand.append(card)
+        """Generate a card ID via quantum effect and add the corresponding card to the next player's hand."""
+        card_id = self.activate_quantum_effect()
+
+        # Créer la carte correspondante
+        card = create_card_by_id(card_id)
+
+        if card:
+            print(f"[Quantum Superposed Card] Added card with ID {card_id} to next player.")
+            game.get_next_player().Hand.append(card)
+        else:
+            print(f"[Quantum Superposed Card] Invalid card ID generated: {card_id}")
 
     def activate_quantum_effect(self):
-        """Generate a quantum random number between 0 and number of different cards (inclusive)."""
-        n_qubits = 5  # Enough to represent numbers up to 31 (2^5 - 1)
-        # Create a quantum circuit with n_qubits qubits and n_qubits classical bits
+        """Quantum generation of an integer between 0 and max_card_id inclusive."""
+        n_qubits = 5  # 2^5 = 32 > max_card_id
         qc = QuantumCircuit(n_qubits, n_qubits)
 
-        # Put all qubits into superposition
         for q in range(n_qubits):
             qc.h(q)
 
         qc.measure(range(n_qubits), range(n_qubits))
-        sim = AerSimulator()    
+
+        sim = AerSimulator()
         qc = transpile(qc, sim)
-        job = sim.run(qc)
-        result = job.result()
+        result = sim.run(qc, shots=1).result()
         counts = result.get_counts()
 
         bitstring = list(counts.keys())[0]
-        number = int(bitstring, 2)% (self.number_of_different_cards+1)
+        number = int(bitstring, 2) % (self.max_card_id + 1)
 
-        
-        # Rejection sampling if number > max_cards
+        print(f"[Quantum Superposed Card] Measured bitstring: {bitstring} -> cardId {number}")
+
         return number

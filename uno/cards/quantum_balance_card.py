@@ -15,7 +15,7 @@ import numpy as np
 class quantum_balance_card(Card):
     def __init__(self, color="Purple"):
         super().__init__(color, "Quantum Balance")
-        self.cardId = 14
+        self.cardId = 10
 
     def card_weight(self, card):
         if isinstance(card.value, int):

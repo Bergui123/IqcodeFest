@@ -82,7 +82,8 @@ class UnoGUI:
 
     def update_ui(self):
         player = self.game.get_current_player()
-        if getattr(player, 'is_bot', False):
+        # If player is an instance of BotCode (i.e., a bot)
+        if isinstance(player, BotCode):
             # display bot Hand area
             self.bot_area.pack(pady=5)
             self.bot_cards_frame.pack(pady=5)
@@ -92,10 +93,10 @@ class UnoGUI:
             if action == 'play':
                 messagebox.showinfo("Bot Turn", f"{player.GetName()} plays {card}")
             elif action == 'draw':
-                if card:
-                    messagebox.showinfo("Bot Turn", f"{player.GetName()} draws {card}")
-                else:
-                    messagebox.showwarning("Bot Turn", f"{player.GetName()} tried to draw but deck is empty.")
+            # if card:
+                messagebox.showinfo("Bot Turn", f"{player.GetName()} draws {card}")
+            else:
+                messagebox.showwarning("Bot Turn", f"{player.GetName()} tried to draw but deck is empty.")
             self.game.next_turn()
             # update next turn UI
             self.update_ui()
@@ -157,7 +158,13 @@ class UnoGUI:
         top = self.game.get_top_card()
         card = player.GetHand()[idx]
         if card.matches(top):
-            self.game.play_card(self.game.current_player_idx, idx)
+            if card.cardId == 17:  # Quantum Grover
+                result = card.play(self.game)
+                if result == "UI_SELECT":
+                    self.prompt_grover_target(card, idx)
+                    return
+            else:
+                self.game.play_card(self.game.current_player_idx, idx)
             winner = self.game.has_winner()
             if winner:
                 messagebox.showinfo("Game Over", f"{winner.GetName()} wins!")
@@ -190,6 +197,38 @@ class UnoGUI:
             else:
                 self.update_ui()
         spin(1)
+
+    def prompt_grover_target(self, card_obj, card_index):
+        player = self.game.get_current_player()
+        hand = player.GetHand()
+        
+        window = tk.Toplevel(self.root)
+        window.title("Select Card to Scan For")
+        window.configure(bg="#222222")
+
+        label = tk.Label(window, text="Choose a card to search for:", fg="white", bg="#222222")
+        label.pack(pady=10)
+
+        def on_select(target_index):
+            selected_card = hand[target_index]
+            window.destroy()
+            self.game.get_card_by_idx(card_index).selected_card = selected_card  # Store selected card in the card object
+            # Call play again with selected_card
+            self.game.play_card(self.game.current_player_idx, card_index)
+            # card_obj.play(self.game, selected_card)
+            self.update_ui()
+
+        for i, card in enumerate(hand):
+            btn = tk.Button(
+                window,
+                text=str(card),
+                width=20,
+                command=lambda i=i: on_select(i),
+                bg=self.color_map.get(card.color, "#cccccc"),
+                fg="black"
+            )
+            btn.pack(padx=10, pady=2)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

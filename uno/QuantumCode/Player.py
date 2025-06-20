@@ -37,3 +37,7 @@ class Player:
     
     def GetCard(sef, cardIndex):
         return self.Hand[cardIndex] if 0 <= cardIndex < len(self.Hand) else None
+    
+    def is_bot(self):
+        """Check if the player is a bot."""
+        return self.Name=="Bot" or self.Name=="BotCode"

@@ -37,10 +37,10 @@ class Game:
             for v in values[1:]:
                 self.deck.CardInPile.append(Card(color, v))
                 self.deck.CardInPile.append(Card(color, v))
-        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Red"))
-        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Blue"))
-        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Green"))
-        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Yellow"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Quantum"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Quantum"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Quantum"))
+        self.deck.CardInPile.append(Quantum_color_card(["Red", "Blue", "Green", "Yellow"],"Quantum"))
         self.deck.CardInPile.append(Quantum_draw_card("Red", 8))
         self.deck.CardInPile.append(Quantum_draw_card("Blue", 8))
         self.deck.CardInPile.append(Quantum_draw_card("Green", 8))
@@ -53,14 +53,14 @@ class Game:
         self.deck.CardInPile.append(Quantum_swap_card("Blue"))
         self.deck.CardInPile.append(Quantum_swap_card("Green"))
         self.deck.CardInPile.append(Quantum_swap_card("Yellow"))
-        self.deck.CardInPile.append(Quantum_shuffle_card("Red", 8))
-        self.deck.CardInPile.append(Quantum_shuffle_card("Blue", 8))
-        self.deck.CardInPile.append(Quantum_shuffle_card("Green", 8))
-        self.deck.CardInPile.append(Quantum_shuffle_card("Yellow", 8))
-        self.deck.CardInPile.append(quantum_balance_card("Red"))
-        self.deck.CardInPile.append(quantum_balance_card("Blue"))
-        self.deck.CardInPile.append(quantum_balance_card("Green"))
-        self.deck.CardInPile.append(quantum_balance_card("Yellow"))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Red"))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Blue"))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Green"))
+        self.deck.CardInPile.append(Quantum_shuffle_card("Yellow"))
+        # self.deck.CardInPile.append(quantum_balance_card("Red"))
+        # self.deck.CardInPile.append(quantum_balance_card("Blue"))
+        # self.deck.CardInPile.append(quantum_balance_card("Green"))
+        # self.deck.CardInPile.append(quantum_balance_card("Yellow"))
         self.deck.CardInPile.append(quantum_card("Red", 8))
         self.deck.CardInPile.append(quantum_card("Blue", 8))
         self.deck.CardInPile.append(quantum_card("Green", 8))
@@ -192,3 +192,10 @@ class Game:
         """Reverse the turn order of players."""
         self.players.reverse()
         self.current_player_idx = len(self.players) - 1 - self.current_player_idx
+
+    def get_card_by_idx(self, card_idx):
+        player = self.get_current_player()
+        if 0 <= card_idx < len(player.Hand):
+            return player.Hand[card_idx]
+        return None
+        

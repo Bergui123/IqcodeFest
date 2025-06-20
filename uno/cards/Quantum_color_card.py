@@ -8,15 +8,17 @@ class Quantum_color_card(Card):
     Uses a full 1D discrete-time coined quantum walk to choose a color.
     """
 
-    def __init__(self, color_list, current_color="Red"):
+    def __init__(self, color_list, current_color="Quantum"):
         self.colors = color_list
         self.current_color = current_color
         self.cardId = 12
-        super().__init__("Quantum", "Color")
+        super().__init__(current_color, "Color")
 
     def play(self, game):
+        self.current_color = game.get_top_card().color
         new_color = self.activate_quantum_walk()
         game.current_color = new_color
+        self.color = new_color
 
     def activate_quantum_walk(self, steps=np.random.randint(1, 5)):
         """

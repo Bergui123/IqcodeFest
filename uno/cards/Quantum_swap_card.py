@@ -1,45 +1,75 @@
 from cards.card import Card
-from qiskit import QuantumCircuit
-from qiskit_aer import AerSimulator # new simulator backend replacing BasicAer
-from qiskit import transpile
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
 
 class Quantum_swap_card(Card):
-    """A card that swaps the hands of the player with another player usig the principle of the swap gate."""
+    """A card that swaps cards of two players using a quantum CSWAP gate, measuring only the data qubits."""
     def __init__(self, color, max_cards=8):
-        super().__init__(color, f"Quantum Superposed up to {max_cards}")
-        self.max_cards = max_cards
-        self.cardId=16
-    
+        super().__init__(color, "Quantum Hand Swap")
+        self.cardId = 16
+
     def play(self, game):
-        """Play the quantum swap card effect."""
         self.activate_quantum_effect(game, game.get_current_player(), game.get_next_player())
-    def activate_quantum_effect(self, game,player1,player2):
-        nbQubits = len(player1.Hand) + len(player2.Hand)
-        circuit = QuantumCircuit(nbQubits+1)
-        #apply hadamar gate to the first qubit it will be used as a control qubit
-        circuit.h(0)
-        for qubit in range(1, len(player1.Hand)+1):
-            circuit.x(qubit)  # Initialize qubits for player1's Hand at 1
-        for qubit in range (1, len(player1.Hand)+1):  
-            circuit.cswap(0, qubit,len(player1.Hand)+qubit) 
-        circuit.measure_all()
-        # Run the circuit on a simulator backend
+
+    def activate_quantum_effect(self, game, player1, player2):
+        n1, n2 = len(player1.Hand), len(player2.Hand)
+        n_swap = min(n1, n2)
+
+        if n_swap == 0:
+            return  # Nothing to swap
+
+        # total qubits = 1 (control) + 2 * n_swap (cards)
+        total_qubits = 1 + 2 * n_swap
+        qc = QuantumCircuit(total_qubits, 2 * n_swap)  # Only measure data qubits
+
+        # Control in superposition
+        qc.h(0)
+
+        # Apply CSWAPs: control is qubit 0, pairs are (1+i, 1+n_swap+i)
+        for i in range(n_swap):
+            qc.cswap(0, 1 + i, 1 + n_swap + i)
+
+        # Measure only the card qubits, skipping the control (qubit 0)
+        for i in range(2 * n_swap):
+            qc.measure(1 + i, i)
+
+        # Run on simulator
         backend = AerSimulator()
-        circuit = transpile(circuit, backend)
-        # Get the results of the measurement
-        result = backend.run(circuit,shots=1).result()
-        # Get the measured values (0 or 1)
-        measured_values = result.get_counts(circuit)
-        # Swap the hands of the players based on the measured values
-        for i, value in enumerate(measured_values):
-            #player 2 gets the cards where mesured value is 1
-            player1 = game.get_current_player()
-            player2 = game.get_next_player()
-            game.get_current_player().Hand.extend([player1.Hand.pop(i) for i in range(len(player1.Hand)) if measured_values[value][i] == '1'])
-            #player 1 gets the cards where measured value is 0 
-            game.get_next_player().Hand.extend([player2.Hand.pop(i) for i in range(len(player2.Hand)) if measured_values[value][i] == '0'])
-        
-                
-        
+        qc = transpile(qc, backend)
+        result = backend.run(qc, shots=1).result()
+        counts = result.get_counts()
+        bitstring = list(counts.keys())[0][::-1]  # Reverse to align with qubit index
 
+        print(f"[Quantum SWAP] Measured bitstring: {bitstring}")
 
+        # Decode result into new hands
+        new_hand1 = []
+        new_hand2 = []
+
+        for i in range(n_swap):
+            # Index in bitstring:
+            # - player1 data qubits are first half [0:n_swap]
+            # - player2 data qubits are second half [n_swap:2*n_swap]
+            b1 = bitstring[i]
+            b2 = bitstring[n_swap + i]
+
+            if b1 == '1':
+                new_hand1.append(player1.Hand[i])
+            else:
+                new_hand2.append(player1.Hand[i])
+
+            if b2 == '1':
+                new_hand1.append(player2.Hand[i])
+            else:
+                new_hand2.append(player2.Hand[i])
+
+        # Add remaining cards if any (those that weren't swapped)
+        new_hand1.extend(player1.Hand[n_swap:])
+        new_hand2.extend(player2.Hand[n_swap:])
+
+        # Apply hands
+        player1.Hand = new_hand1
+        player2.Hand = new_hand2
+
+        print(f"[Quantum SWAP] {player1.GetName()} new hand: {[str(c) for c in player1.Hand]}")
+        print(f"[Quantum SWAP] {player2.GetName()} new hand: {[str(c) for c in player2.Hand]}")
