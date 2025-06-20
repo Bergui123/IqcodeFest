@@ -2,6 +2,7 @@ from uno.QuantumCode.Deck import Deck
 import random
 from uno.QuantumCode.Player import Player
 from uno.cards.card import Card
+import qrng
 
 
 class Game:
@@ -73,4 +74,15 @@ class Game:
             if not player.GetHand():
                 return player
         return None
+    
+    def QuantumShuffleDeck(self):
+        """Shuffle the deck using quantum principles."""
+        shuffled_deck = []
+        qrng.set_provider_as_IBMQ('')
+        qrng.set_backend()
+        while self.deck:
+            # Get a quantum random index
+            index = qrng.get_random_int32(0, len(self.deck) - 1)
+            shuffled_deck.append(self.deck.pop(index))
+        self.deck = shuffled_deck
 
