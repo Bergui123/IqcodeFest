@@ -23,3 +23,6 @@ Presented by the QuantumETSBis team for the IQuCodeFest25 Hackathon
 
 Here is an exemple of a game
 [▶️ Watch the demo (45 s)](./video.mp4)
+<video controls loop playsinline style="max-width:100%;">
+  <source src="./video.mp4" type="video/mp4">
+  </video>
