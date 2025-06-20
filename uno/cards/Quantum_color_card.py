@@ -11,7 +11,7 @@ class QuantumColorCard(Card):
     def __init__(self, color_list, current_color="Red"):
         self.colors = color_list
         self.current_color = current_color
-        self.cardId = 21
+        self.cardId = 12
         super().__init__("Quantum", "Color")
 
     def play(self, game):

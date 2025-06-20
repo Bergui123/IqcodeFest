@@ -7,6 +7,7 @@ import random
 class TeleportationCard(Card):
     def __init__(self, color):
         super().__init__(color, "Teleportation")
+        self.cardId = 18 # Unique identifier for this card type
     
     def play(self, game):
         game.ui.set_info(f"{self.color} Teleportation Card played! Activating quantum teleportation...")

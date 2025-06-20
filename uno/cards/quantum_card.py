@@ -8,6 +8,7 @@ class QuantumCard(Card):
     def __init__(self, color, value):
         super().__init__(color, value)
         self.circuit = self.create_circuit()
+        self.cardId = 11  # Unique identifier for this card type
     
     def create_circuit(self):
         qc = QuantumCircuit(1)
