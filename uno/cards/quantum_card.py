@@ -1,10 +1,8 @@
 # quantum_card.py
 # Exemple of a quantum card that uses Qiskit to create a quantum effect #
-import sys
-import os
-sys.path.append(os.path.dirname(__file__)) 
-from card import Card
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from cards.card import Card
 
 class QuantumCard(Card):
     def __init__(self, color, value):
@@ -18,11 +16,12 @@ class QuantumCard(Card):
         return qc
     
     def run_quantum_effect(self):
-        # backend = Aer.get_backend('aer_simulator')
-        # job = execute(self.circuit, backend, shots=1)
-        # result = job.result()
-        # counts = result.get_counts()
-        return 0
+        backend = AerSimulator()
+        qc = self.create_circuit()
+        transpiled = transpile(qc, backend=backend)
+        result = backend.run(transpiled, shots=1).result()
+        counts = result.get_counts()
+        return counts
     
     def play(self, game):
         super().play(game)
