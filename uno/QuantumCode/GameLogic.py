@@ -38,7 +38,6 @@ class GameLogic:
     def game_loop(self):
         while True:
             player = self.controller.get_current_player()
-            # Bot always draws
             if hasattr(player, 'is_bot') and player.is_bot:
                 drawn = player.take_turn(self.controller)
                 if drawn:
