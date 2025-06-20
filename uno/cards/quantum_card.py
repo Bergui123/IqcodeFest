@@ -6,7 +6,7 @@ from cards.card import Card
 
 class quantum_card(Card):
     def __init__(self, color):
-        super().__init__(color)
+        super().__init__(color, "Quantum Effect Card")
         self.circuit = self.create_circuit()
         self.cardId = 11  # Unique identifier for this card type
     

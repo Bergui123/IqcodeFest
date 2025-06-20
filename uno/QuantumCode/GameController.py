@@ -5,6 +5,7 @@ from qiskit_aer import AerSimulator
 from .Deck   import Deck
 from .Player import Player
 from cards.card import Card
+import math
 
 # explicit imports for every card in uno/cards/
 from uno.cards.Quantum_color_card       import Quantum_color_card
@@ -85,8 +86,8 @@ class Game:
         self.deck.CardInPile.append(teleportation_card("Green"))
         self.deck.CardInPile.append(teleportation_card("Yellow"))
 
-        #self.QuantumShuffleDeck()
-        random.shuffle(self.deck.CardInPile)
+        self.QuantumShuffleDeck()
+        # random.shuffle(self.deck.CardInPile)
 
     def deal(self):
         """Deal 7 cards to each player"""
@@ -174,30 +175,46 @@ class Game:
             return self.players[idx]
         return None
     
+
     def QuantumShuffleDeck(self):
-        """Shuffle the deck using quantum principles."""
+        """Shuffle the deck using quantum-generated indices."""
         shuffled_deck = []
-        """Generate a quantum random number between 0 and max_cards (inclusive)."""
-        n_qubits = 3  #
-        qc = QuantumCircuit(n_qubits, n_qubits)
+        sim = AerSimulator()
 
-        # Put all qubits into superposition
-        for q in range(n_qubits):
-            qc.h(q)
+        while self.deck.CardInPile:
+            # Update number of cards remaining
+            num_cards = len(self.deck.CardInPile)
 
-        qc.measure(range(n_qubits), range(n_qubits))
-        sim = AerSimulator()    
-        qc = transpile(qc, sim)
-        job = sim.run(qc)
-        result = job.result()
-        counts = result.get_counts()
+            # Handle the final card without quantum circuit
+            if num_cards == 1:
+                shuffled_deck.append(self.deck.CardInPile.pop(0))
+                break
 
-        bitstring = list(counts.keys())[0]
-        number = int(bitstring, 2)
-        
-        while self.deck:
-            shuffled_deck.append(self.deck.CardInPile.pop(number% len(self.deck.CardInPile)))
-        self.deck = shuffled_deck
+            # Dynamically calculate number of qubits needed (at least 1)
+            n_qubits = max(1, math.ceil(math.log2(num_cards)))
+
+            # Build quantum circuit
+            qc = QuantumCircuit(n_qubits, n_qubits)
+            qc.h(range(n_qubits))  # apply Hadamard to all qubits
+            qc.measure(range(n_qubits), range(n_qubits))
+
+            # Transpile and run
+            tqc = transpile(qc, sim)
+            job = sim.run(tqc, shots=1)
+            result = job.result()
+            counts = result.get_counts()
+            bitstring = list(counts.keys())[0]
+
+            try:
+                index = int(bitstring, 2) % num_cards
+            except ValueError:
+                index = random.randint(0, num_cards - 1)
+
+            # Append selected card and remove from original deck
+            shuffled_deck.append(self.deck.CardInPile.pop(index))
+
+        self.deck.CardInPile = shuffled_deck
+
 
     def reverse_turn_order(self):
         """Reverse the turn order of players."""

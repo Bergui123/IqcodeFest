@@ -27,7 +27,7 @@ class BotCode(Player):
             return 5
 
     def is_playable(self, card, top_card):
-        return card.color == top_card.color or card.value == top_card.value
+        return card.color == top_card.color or card.value == top_card.value or top_card.color == "Quantum" or card.color == "Quantum"
 
     def generate_qubo(self, Hand, top_card):
         mdl = Model("BotDecision")
@@ -107,14 +107,16 @@ class BotCode(Player):
         if most_likely_bitstring is not None:
             selected_index = None
             max_weight = -1
-            for i in range(len(playable_indices)):
+            for i in range(len(Hand)):
                 bit_val = int(most_likely_bitstring[::-1][i])
-                real_index = playable_indices[i]
-                print(f"Card {real_index}: {Hand[real_index]}, Bit: {bit_val}")
+                real_index = Hand[i]
+                print(f"Card {i}: {Hand[i]}, Bit: {bit_val}")
                 if bit_val == 1:
-                    return ('play', real_index)
+                    if not self.is_playable(Hand[i], top_card):
+                        break
+                    return ('play', i)
 
-            print("Bitstring has no 1s, fallback triggered.")
+            # print("Bitstring has no 1s, fallback triggered.")
             for i in playable_indices:
                 w = self.card_weight(Hand[i])
                 if w > max_weight:
@@ -122,7 +124,7 @@ class BotCode(Player):
                     selected_index = i
 
             if selected_index is not None:
-                print(f"Fallback: manually selecting card {selected_index} -> {Hand[selected_index]}")
+                # print(f"Fallback: manually selecting card {selected_index} -> {Hand[selected_index]}")
                 return ('play', selected_index)
 
         print("No valid move, drawing a card.")
@@ -136,3 +138,7 @@ class BotCode(Player):
             return ('play', played)
         drawn = game.draw_card(idx)
         return ('draw', drawn)
+    
+    def is_bot(self):
+        """Check if the player is a bot."""
+        return self.Name=="Bot" or self.Name=="BotCode"

@@ -30,7 +30,7 @@ def create_card_by_id(card_id):
         8: Card(random.choice(colors), 8),
         9: Card(random.choice(colors), 9),
         10: quantum_balance_card(random.choice(colors)),
-        11: quantum_card(random.choice(colors), random.randint(0, 9)),
+        11: quantum_card(random.choice(colors)),
         12: Quantum_color_card(colors, random.choice(colors)),
         13: Quantum_draw_card(random.choice(colors), 8),
         14: Quantum_shuffle_card(random.choice(colors)),
