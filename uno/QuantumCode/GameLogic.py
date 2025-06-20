@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from uno.QuantumCode.Game import Game
 from uno.cards.card import Card
 from uno.QuantumCode.Player import Player
+from uno.Bot.BotCode import BotCode
 
 class GameLogic:
     def __init__(self):
@@ -22,6 +23,10 @@ class GameLogic:
         for i in range(num):
             name = input(f"Enter name for player {i+1}: ")
             self.controller.add_player(name)
+        # Add a bot that always draws
+        bot = BotCode()
+        self.controller.players.append(bot)
+        print(f"Added bot: {bot.GetName()}")
 
     def start(self):
         self.add_players()
@@ -33,6 +38,15 @@ class GameLogic:
     def game_loop(self):
         while True:
             player = self.controller.get_current_player()
+            # Bot always draws
+            if hasattr(player, 'is_bot') and player.is_bot:
+                drawn = player.take_turn(self.controller)
+                if drawn:
+                    print(f"{player.GetName()} draws {drawn}")
+                else:
+                    print(f"{player.GetName()} tried to draw but deck is empty!")
+                self.controller.next_turn()
+                continue
             top = self.controller.get_top_card()
             print(f"\n{player.GetName()}'s turn. Top card: {top}")
             hand = player.GetHand()
