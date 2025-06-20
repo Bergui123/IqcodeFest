@@ -36,7 +36,7 @@ class QuantumBalanceCard(Card):
     def play(self, game):
         game.ui.set_info(f"{self.color} Quantum Balance Card played! Rebalancing hands quantumly...")
 
-        players = [game.get_current_player(), game.next_player()]   #game.players[:2]
+        players = [game.get_current_player(), game.get_next_player()]   #game.players[:2]
         all_cards = players[0].hand + players[1].hand
 
         dummy_used = False

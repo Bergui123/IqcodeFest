@@ -34,5 +34,6 @@ class Player:
     def GetCardPlayed(self):
         """Return the cards played by the player."""
         return self.CardPlayed
+    
     def GetCard(sef, cardIndex):
         return self.Hand[cardIndex] if 0 <= cardIndex < len(self.Hand) else None
