@@ -1,6 +1,7 @@
 import random
+from cards.card import Card
 
-class QuantumEnigma:
+class QuantumEnigma(Card):
     questions = [
     "What is the basic unit of quantum information?",
     "What is the name of the quantum phenomenon where qubits influence each other instantly?",
@@ -26,7 +27,7 @@ class QuantumEnigma:
     "quantum",
     "NOT"
     ]
-    cardId=16
+    
     # Pair them using zip
     qa_pairs = list(zip(questions, answers))
     current_question=None
@@ -34,6 +35,7 @@ class QuantumEnigma:
     def __init__(self):
         self.current_question = None
         self.current_answer = None
+        self.cardId=17
         self.select_random_qa()  # Automatically select a random pair on initialization
     
     def select_random_qa(self):

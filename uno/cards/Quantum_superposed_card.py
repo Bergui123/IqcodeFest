@@ -9,7 +9,7 @@ class QuantumSuperposedCard(Card):
         super().__init__(color, f"Quantum Superposed up to {max_cards}")
         self.max_cards = max_cards
         self.cardId=15
-        self.number_of_different_cards = 16  # Maximum number of different cards to draw
+        self.number_of_different_cards = 19  # Maximum number of different cards to draw
 
     def play(self, game):
         """Play the quantum superposed card effect."""

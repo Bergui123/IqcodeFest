@@ -29,7 +29,8 @@ class Game:
             for v in values[1:]:
                 self.deck.CardInPile.append(Card(color, v))
                 self.deck.CardInPile.append(Card(color, v))
-        random.shuffle(self.deck.CardInPile)
+        self.QuantumShuffleDeck()
+        #random.shuffle(self.deck.CardInPile)
 
     def deal(self):
         """Deal 7 cards to each player"""

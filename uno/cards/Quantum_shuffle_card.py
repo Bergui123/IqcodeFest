@@ -8,7 +8,7 @@ class QuantumShuffledCard(Card):
     def __init__(self, color, max_cards=8):
         super().__init__(color, f"Quantum Shuffle up to {max_cards}")
         self.max_cards = max_cards
-        self.cardId = 19  # Unique identifier for this card type
+        self.cardId = 14  # Unique identifier for this card type
 
     def play(self, game):
         """Play the quantum shuffle card effect."""
